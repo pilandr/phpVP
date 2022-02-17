@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="/css/libs.min.css">
+    <link rel="stylesheet" href="/css/modal.css">
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/media.css">
   </head>
@@ -16,7 +18,7 @@
         <nav class="main-navigation">
           <ul class="nav-list">
             <li class="nav-list__item"><a href="{{ route('/') }}" class="nav-list__item__link">Главная</a></li>
-            <li class="nav-list__item"><a href="#" class="nav-list__item__link">Мои заказы</a></li>
+            <li class="nav-list__item"><a href="{{ route('orderlist') }}" class="nav-list__item__link">Мои заказы</a></li>
             <li class="nav-list__item"><a href="#" class="nav-list__item__link">Новости</a></li>
             <li class="nav-list__item"><a href="#" class="nav-list__item__link">О компании</a></li>
           </ul>
@@ -92,51 +94,7 @@
             <div class="content-top__text">Купить игры неборого без регистрации смс с торента, получить компкт диск, скачать Steam игры после оплаты</div>
             <div class="slider"><img src="/img/slider.png" alt="Image" class="image-main"></div>
           </div>
-          <div class="content-middle">
-            <div class="content-head__container">
-              <div class="content-head__title-wrap">
-                  @if (empty($curCategory))
-                      <div class="content-head__title-wrap__title bcg-title">Последние товары</div>
-                  @else
-                      <div class="content-head__title-wrap__title bcg-title">Игры в разделе {{$curCategory->name}}</div>
-                  @endif
-
-              </div>
-              <div class="content-head__search-block">
-                <div class="search-container">
-                  <form class="search-container__form">
-                    <input type="text" class="search-container__form__input">
-                    <button class="search-container__form__btn">search</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div class="content-main__container">
-              <div class="products-columns">
-                  @foreach($products as $product)
-                      <?php $hey = $product->category ?>
-
-                      <div class="products-columns__item">
-                          {{$hey->name}}
-                          <div class="products-columns__item__title-product"><a href="#" class="products-columns__item__title-product__link">{{ $product->name }}</a></div>
-                          <div class="products-columns__item__thumbnail"><a href="#" class="products-columns__item__thumbnail__link"><img src=" {{ (empty($product->photo))? "/img/cover/default.jpg" : "/img/cover/" . $product->photo }}" alt="Preview-image" class="products-columns__item__thumbnail__img"></a></div>
-                          <div class="products-columns__item__description"><span class="products-price">{{ $product->price }} руб</span><a href="#" class="btn btn-blue">Купить</a></div>
-                      </div>
-                  @endforeach
-              </div>
-            </div>
-            <div class="content-footer__container">
-              <ul class="page-nav">
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link"><i class="fa fa-angle-double-left"></i></a></li>
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link">1</a></li>
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link">2</a></li>
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link">3</a></li>
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link">4</a></li>
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link">5</a></li>
-                <li class="page-nav__item"><a href="#" class="page-nav__item__link"><i class="fa fa-angle-double-right"></i></a></li>
-              </ul>
-            </div>
-          </div>
+        @yield('content-middle')
           <div class="content-bottom"></div>
         </div>
       </div>
@@ -177,6 +135,41 @@
         </div>
       </footer>
     </div>
+
+    @if (!empty($product))
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Модальное содержание -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>Оформление заказа</h2>
+                </div>
+                <div class="modal-body">
+                    <div id="modal-ok">
+                        <h1 class="modal-ok__title">Ваш заказ принят</h1>
+                    </div>
+                    <div id="modal-order">
+                        <span class="modal-good">Товар</span><span class="modal-good__id" >{{ $product->id }}:</span>
+                        <div class="modal-good__title">Название: {{ $product->name }}</div>
+                        <div class="modal-good__price">Цена: {{ $product->price }} руб.</div>
+                        <h3 class="modal-text">Свяжитесь с нашим менеджером</h3>
+                        @auth
+                            Email: <input id="email" type="email" name="email" value="{{ Auth::user()->email }}" disabled>
+                            Имя: <input id="name" type="text" name="name" value="{{ Auth::user()->name }}" disabled>
+                        @else
+                            Email: <input id="email" type="email" name="email">
+                            Имя: <input id="name" type="text" name="name">
+                        @endauth
+                        <input id="id" type="text" value="{{ $product->id }}" name="products_id" hidden>
+                        <input type="button" value="Оформить заказ" onclick="order()">
+                        <div id="message"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <script src="/js/main.js"></script>
   </body>
 </html>

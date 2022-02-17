@@ -940,7 +940,8 @@ img {
       line-height: 1.7rem;
       text-align: center; }
       .page-nav__item__link:hover, .page-nav__item__link:focus, .page-nav__item__link--active {
-        color: #d28324; }
+        color: #d28324;
+        font-size: 1.7rem;}
 
 .alignnone {
   margin: 5px 20px 20px 0; }
