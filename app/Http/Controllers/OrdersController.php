@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderShipped;
 use App\Models\Category;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Orders;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrdersController extends Controller
 {
@@ -44,13 +47,20 @@ class OrdersController extends Controller
             setcookie("email", $email, time()+3600*10);
         }
 
-        $user = (new Orders([
+        $order = (new Orders([
             'name' => $name,
             'email' => $email,
             'products_id' => $products_id
         ]));
-
-        $user->save();
+        $order->save();
+        try {
+            $setting = Setting::getByNameField('email');
+            if ($setting) {
+                Mail::to($setting->value)->send(new OrderShipped($order));
+            }
+        } catch (\Exception $e) {
+            //
+        }
 
         return $this->response(['result' => true]);
     }
@@ -61,7 +71,6 @@ class OrdersController extends Controller
 
         if (Auth::check()) {
             $orders = Orders::query()->where('email','=', $user->email)->orderBy('updated_at', 'DESC')->get();
-
         } elseif (!empty($_COOKIE['email'])) {
             $emailFromSession = $_COOKIE['email'];
             $orders = Orders::query()->where('email','=', $emailFromSession)->orderBy('updated_at', 'DESC')->get();
@@ -79,10 +88,12 @@ class OrdersController extends Controller
 
         $category = Category::query()->orderBy('name', 'DESC')->get();
 
+
         return view('orders', [
             'categories' => $category,
             'orders' => $orders,
-            'sum' => $sum
+            'sum' => $sum,
+            'countOrders' => OrdersController::countOrder()
         ]);
     }
 
@@ -90,5 +101,14 @@ class OrdersController extends Controller
     {
         header('Content-type: application/json');
         return json_encode($data);
+    }
+
+    static public function countOrder()
+    {
+        if (Auth::check()) {
+            return Orders::query()->where('email','=', Auth::user()->email)->count();
+        } elseif (!empty($_COOKIE['email'])) {
+            return Orders::query()->where('email','=', $_COOKIE['email'])->count();
+        } else return 0;
     }
 }

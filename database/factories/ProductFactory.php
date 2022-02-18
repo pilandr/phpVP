@@ -18,10 +18,10 @@ class ProductFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'price' => mt_rand(30,150),
+            'price' => mt_rand(30,300),
             'photo' => "game-" . mt_rand(1,9) . ".jpg",
             'description' => $this->faker->text(),
-            'categories_id' => mt_rand(1,10)
+            'categories_id' => mt_rand(14,23)
         ];
     }
 }

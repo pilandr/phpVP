@@ -55,14 +55,12 @@ async function order()
         });
 
         const result = await response.json();
-        console.log(result);
         if (result.result) {
             modalOk.style.display = "block";
             modalOrder.style.display = "none";
         } else {
             message.innerHTML = '<span style="color:red">' + result.error + '</span>';
         }
-        console.log(result)
     } catch (e)
     {
         console.log(e.message)

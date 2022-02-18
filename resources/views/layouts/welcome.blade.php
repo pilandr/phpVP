@@ -30,7 +30,7 @@
           <div class="payment-container">
             <div class="payment-basket__status">
               <div class="payment-basket__status__icon-block"><a class="payment-basket__status__icon-block__link"><i class="fa fa-shopping-basket"></i></a></div>
-              <div class="payment-basket__status__basket"><span class="payment-basket__status__basket-value">0</span><span class="payment-basket__status__basket-value-descr">товаров</span></div>
+              <div class="payment-basket__status__basket"><span class="payment-basket__status__basket-value">{{$countOrders}}</span><span class="payment-basket__status__basket-value-descr">товаров</span></div>
             </div>
           </div>
             @if (Route::has('login'))
@@ -42,6 +42,9 @@
                                 @csrf
                                 <input type="submit" value="Выйти" class="authorization-block__link">
                             </form>
+                            @if (Auth::user()->isAdmin)
+                                <a href="{{ route('admin') }}" class="authorization-block__link">Администрирование</a>
+                            @endif
                         </div>
                     @else
                         <div class="authorization-block">
@@ -63,7 +66,7 @@
             <div class="sidebar-item__content">
               <ul class="sidebar-category">
                   @foreach($categories as $category)
-                    <li class="sidebar-category__item"><a href="/page/category/{{ $category->id }}" class="sidebar-category__item__link">{{ $category->name }}</a></li>
+                    <li class="sidebar-category__item"><a href="/category/{{ $category->id }}" class="sidebar-category__item__link">{{ $category->name }}</a></li>
                   @endforeach
 
               </ul>

@@ -36,26 +36,26 @@
         <div class="content-footer__container">
             <ul class="page-nav">
                 @if (empty($curCategory))
-                    <li class="page-nav__item"><a href="/page/last/{{ $paginator["prev"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="page-nav__item"><a href="/last/{{ $paginator["prev"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-left"></i></a></li>
                     @for ($i = 1; $i < $paginator["count"] + 1; $i++)
                         @if ($i == $paginator["active"])
-                            <li class="page-nav__item"><a href="/page/last/{{ $i }}" class="page-nav__item__link--active">{{ $i }}</a></li>
+                            <li class="page-nav__item"><a href="/last/{{ $i }}" class="page-nav__item__link--active">{{ $i }}</a></li>
                         @else
-                            <li class="page-nav__item"><a href="/page/last/{{ $i }}" class="page-nav__item__link">{{ $i }}</a></li>
+                            <li class="page-nav__item"><a href="/last/{{ $i }}" class="page-nav__item__link">{{ $i }}</a></li>
                         @endif
 
                     @endfor
-                    <li class="page-nav__item"><a href="/page/last/{{ $paginator["next"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-right"></i></a></li>
+                    <li class="page-nav__item"><a href="/last/{{ $paginator["next"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-right"></i></a></li>
                 @else
-                    <li class="page-nav__item"><a href="/page/category/{{ $curCategory->id }}/{{ $paginator["prev"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-left"></i></a></li>
+                    <li class="page-nav__item"><a href="/category/{{ $curCategory->id }}/{{ $paginator["prev"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-left"></i></a></li>
                     @for ($i = 1; $i < $paginator["count"] + 1; $i++)
                         @if ($i == $paginator["active"])
-                            <li class="page-nav__item"><a href="/page/category/{{ $curCategory->id }}/{{ $i }}" class="page-nav__item__link--active">{{ $i }}</a></li>
+                            <li class="page-nav__item"><a href="/category/{{ $curCategory->id }}/{{ $i }}" class="page-nav__item__link--active">{{ $i }}</a></li>
                         @else
-                            <li class="page-nav__item"><a href="/page/category/{{ $curCategory->id }}/{{ $i }}" class="page-nav__item__link">{{ $i }}</a></li>
+                            <li class="page-nav__item"><a href="/category/{{ $curCategory->id }}/{{ $i }}" class="page-nav__item__link">{{ $i }}</a></li>
                         @endif
                     @endfor
-                    <li class="page-nav__item"><a href="/page/category/{{ $curCategory->id }}/{{ $paginator["next"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-right"></i></a></li>
+                    <li class="page-nav__item"><a href="/category/{{ $curCategory->id }}/{{ $paginator["next"] }}" class="page-nav__item__link"><i class="fa fa-angle-double-right"></i></a></li>
                 @endif
 
             </ul>

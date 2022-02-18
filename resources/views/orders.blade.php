@@ -36,7 +36,7 @@
                 @endforelse
             </div>
         </div>
-        @if (!empty($orders))
+        @if (count($orders))
             <div class="cart-product-list__result-item">
                 <div class="cart-product-list__result-item__text">Итого</div>
                 <div class="cart-product-list__result-item__value">{{ $sum }}</div>

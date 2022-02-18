@@ -16,7 +16,8 @@ class ProductController extends Controller
 
         return view('product', [
             'categories' => $category,
-            'product' => $product
+            'product' => $product,
+            'countOrders' => OrdersController::countOrder()
         ]);
     }
 }
